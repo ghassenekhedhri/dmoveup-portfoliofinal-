@@ -332,6 +332,8 @@ const ServicesSection = React.forwardRef<HTMLElement, {}>((props, ref) => {
                 </div>
             </div>
         </SectionWrapper>
+    );
+});
 
 // 4.3. Portfolio Section
 const PortfolioSection = React.forwardRef<HTMLElement, {}>((props, ref) => {
