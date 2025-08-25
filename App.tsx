@@ -4,6 +4,7 @@ import Lottie from 'react-lottie-player';
 import { Carousel } from './src/components/Carousel';
 import { VerticalVideoCard } from './src/components/VerticalVideoCard';
 import { VideoModal } from './src/components/VideoModal';
+import { ServiceCard } from './src/components/ServiceCard';
 import { getYouTubeThumbnail, isYouTubeUrl } from './src/utils/youtube';
 import aiBrainLottieData from './src/assets/lottie/ai-brain.json';
 
@@ -51,12 +52,36 @@ interface VideoItem {
 
 const MOCK_DATA = {
     services: [
-        { title: "Sponsoring & Ads", description: "Campagnes publicitaires ciblées sur Meta, Google & TikTok pour un ROI maximal." },
-        { title: "Développement Web & Mobile", description: "Sites web et applications ultra-performants, optimisés pour la conversion." },
-        { title: "Optimisation SEO", description: "Améliorez votre visibilité et dominez les résultats de recherche." },
-        { title: "Design & Vidéo", description: "Créations visuelles et contenus vidéo percutants qui captivent votre audience." },
-        { title: "Gestion des Réseaux Sociaux", description: "Stratégies de contenu engageantes pour construire et animer votre communauté." },
-        { title: "Consulting", description: "Conseils stratégiques pour aligner vos actions marketing avec vos objectifs business." },
+        { 
+            title: "Sponsoring & Ads", 
+            description: "Campagnes publicitaires ciblées sur Meta, Google & TikTok pour un ROI maximal. Nous optimisons vos budgets publicitaires avec des stratégies data-driven et des créatifs performants.", 
+            icon: TrendingUpIcon 
+        },
+        { 
+            title: "Développement Web & Mobile", 
+            description: "Sites web et applications ultra-performants, optimisés pour la conversion. Architecture moderne, UX/UI soignée et intégrations API avancées pour une expérience utilisateur exceptionnelle.", 
+            icon: GlobeIcon 
+        },
+        { 
+            title: "Optimisation SEO", 
+            description: "Améliorez votre visibilité et dominez les résultats de recherche. Audit technique complet, optimisation on-page et stratégie de contenu pour un référencement naturel durable.", 
+            icon: TrendingUpIcon 
+        },
+        { 
+            title: "Design & Vidéo", 
+            description: "Créations visuelles et contenus vidéo percutants qui captivent votre audience. De l'identité visuelle aux vidéos promotionnelles, nous donnons vie à votre marque.", 
+            icon: VideoIcon 
+        },
+        { 
+            title: "Gestion des Réseaux Sociaux", 
+            description: "Stratégies de contenu engageantes pour construire et animer votre communauté. Planning éditorial, création de contenu et community management pour maximiser votre engagement.", 
+            icon: UsersIcon 
+        },
+        { 
+            title: "Consulting", 
+            description: "Conseils stratégiques pour aligner vos actions marketing avec vos objectifs business. Audit marketing, définition de personas et roadmap de croissance personnalisée.", 
+            icon: MessageSquareIcon 
+        },
     ],
     portfolio: {
         videos: [
@@ -264,33 +289,50 @@ const HeroSection = React.forwardRef<HTMLElement, {}>((props, ref) => (
 ));
 
 // 4.2. Services Section
+    const [expandedCard, setExpandedCard] = useState<number | null>(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    const handleCardToggle = (index: number) => {
+        if (isMobile) {
+            // On mobile, allow multiple cards to be open
+            setExpandedCard(expandedCard === index ? null : index);
+        } else {
+            // On desktop, only one card open at a time
+            setExpandedCard(expandedCard === index ? null : index);
+        }
+    };
+
+    return (
 const ServicesSection = React.forwardRef<HTMLElement, {}>((props, ref) => (
-    <SectionWrapper ref={ref} id="services">
-        <SectionTitle>
-            Nos <span className="text-brand-mint">Services</span>
-        </SectionTitle>
-        <div className="w-full">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                {MOCK_DATA.services.map((service, index) => (
-                    <motion.div
-                        key={service.title}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        viewport={{ once: true, amount: 0.5 }}
-                        className="bg-gray-50/50 dark:bg-white/5 p-6 lg:p-8 rounded-xl border border-black/10 dark:border-white/10 hover:border-brand-mint/50 transition-colors h-full flex flex-col"
-                    >
-                        <h3 className="font-bold text-xl sm:text-2xl lg:text-3xl mb-4 text-brand-mint">
-                            {service.title}
-                        </h3>
-                        <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg flex-grow">
-                            {service.description}
-                        </p>
-                    </motion.div>
-                ))}
+        <SectionWrapper ref={ref} id="services">
+            <SectionTitle>
+                Nos <span className="text-brand-mint">Services</span>
+            </SectionTitle>
+            <div className="w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                    {MOCK_DATA.services.map((service, index) => (
+                        <ServiceCard
+                            key={service.title}
+                            service={service}
+                            isExpanded={expandedCard === index}
+                            onToggle={() => handleCardToggle(index)}
+                            index={index}
+                        />
+                    ))}
+                </div>
             </div>
-        </div>
-    </SectionWrapper>
+        </SectionWrapper>
+    );
 ));
 
 // 4.3. Portfolio Section
