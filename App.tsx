@@ -289,6 +289,7 @@ const HeroSection = React.forwardRef<HTMLElement, {}>((props, ref) => (
 ));
 
 // 4.2. Services Section
+const ServicesSection = React.forwardRef<HTMLElement, {}>((props, ref) => {
     const [expandedCard, setExpandedCard] = useState<number | null>(null);
     const [isMobile, setIsMobile] = useState(false);
 
@@ -313,7 +314,6 @@ const HeroSection = React.forwardRef<HTMLElement, {}>((props, ref) => (
     };
 
     return (
-const ServicesSection = React.forwardRef<HTMLElement, {}>((props, ref) => (
         <SectionWrapper ref={ref} id="services">
             <SectionTitle>
                 Nos <span className="text-brand-mint">Services</span>
@@ -332,8 +332,6 @@ const ServicesSection = React.forwardRef<HTMLElement, {}>((props, ref) => (
                 </div>
             </div>
         </SectionWrapper>
-    );
-));
 
 // 4.3. Portfolio Section
 const PortfolioSection = React.forwardRef<HTMLElement, {}>((props, ref) => {
